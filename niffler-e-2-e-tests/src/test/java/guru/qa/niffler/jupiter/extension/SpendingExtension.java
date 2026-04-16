@@ -4,6 +4,8 @@ import guru.qa.niffler.jupiter.annotation.Spending;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.service.SpendApiClient;
+import guru.qa.niffler.service.SpendClient;
+import guru.qa.niffler.service.SpendDbClient;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
@@ -16,7 +18,7 @@ import java.util.Date;
 public class SpendingExtension implements BeforeEachCallback, ParameterResolver {
 
   public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(SpendingExtension.class);
-  private final SpendApiClient spendApiClient = new SpendApiClient();
+  private final SpendClient spendClient = new SpendDbClient();
 
 
   @Override
@@ -40,7 +42,7 @@ public class SpendingExtension implements BeforeEachCallback, ParameterResolver 
               anno.description(),
               anno.username()
           );
-          SpendJson createdSpending = spendApiClient.createSpending(spend);
+          SpendJson createdSpending = spendClient.createSpending(spend);
           context.getStore(NAMESPACE)
               .put(context.getUniqueId(), createdSpending);
         }
